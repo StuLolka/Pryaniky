@@ -13,14 +13,7 @@ final class Views {
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
-//    
-//    let selector: UISegmentedControl = {
-//        let selector = UISegmentedControl()
-//        selector.translatesAutoresizingMaskIntoConstraints = false
-//        selector.backgroundColor = .systemPink
-//        return selector
-//    }()
-//    
+    
     let pictureView: UIImageView = {
         let image = UIImageView()
         image.translatesAutoresizingMaskIntoConstraints = false
@@ -32,4 +25,5 @@ final class Views {
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
+
 }
