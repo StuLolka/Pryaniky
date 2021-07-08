@@ -24,7 +24,6 @@ final class NetworkManager {
             do {
                 let storedData = try JSONDecoder().decode(NetworkModel.self, from: data)
                 completion(storedData)
-                print(storedData.data)
             } catch {
                 print("Something went wrong: \(error.localizedDescription)")
             }

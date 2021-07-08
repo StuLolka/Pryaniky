@@ -12,7 +12,7 @@ extension UIImageView {
     func loadImageFromURL(url: String) {
         self.image = nil
         guard let URL = URL(string: url) else {
-            print("No Image For this url", url)
+            print("No Image For this url: ", url)
             return
         }
 

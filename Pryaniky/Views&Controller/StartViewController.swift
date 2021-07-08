@@ -17,10 +17,8 @@ class StartViewController: UIViewController {
         didSet {
             switch state {
             case .hz:
-                print("nameArray[0] = \(nameArray[0])")
                 getAlert(text: nameArray[0])
             case .image:
-                print("nameArray[1] = \(nameArray[1])")
                 getAlert(text: nameArray[1])
             case .turnOff:
                 return
@@ -29,11 +27,9 @@ class StartViewController: UIViewController {
     }
     
     lazy var hzLabel1 = views.hzLabel1
-    
     lazy var pictureView = views.pictureView
-    
     lazy var hzLabel2 = views.hzLabel2
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
@@ -44,6 +40,7 @@ class StartViewController: UIViewController {
         }
     }
     
+    //MARK: - adding reactions to touching objects
     private func addTaps() {
         let tapHZ1 = UITapGestureRecognizer(target: self, action: #selector(hzWasTapped))
         hzLabel1.isUserInteractionEnabled = true
@@ -58,6 +55,7 @@ class StartViewController: UIViewController {
         pictureView.addGestureRecognizer(tapImage)
     }
     
+    //MARK: - adding the received information to the screen
     private func addDataToView(data: NetworkModel) {
         DispatchQueue.main.async {
             self.hzLabel1.text = data.data[0].data.text
@@ -66,24 +64,31 @@ class StartViewController: UIViewController {
             self.addNameInArray(data: data.data)
             
             if let text1 = data.data[2].data.variants?[0].text, let text2 = data.data[2].data.variants?[1].text, let text3 = data.data[2].data.variants?[2].text {
-                let items = [text1, text2, text3]
-                let selector = UISegmentedControl(items: items)
-                self.addSelector(selector: selector)
-                if let selectedID = data.data[2].data.selectedId, let variants = data.data[2].data.variants{
-                    self.getSelectedSegment(id: selectedID, variants: variants, selector: selector)
-                }
-                if let url = data.data[1].data.url {
-                    self.pictureView.loadImageFromURL(url: url)
-                }
+                self.createSelector(text1: text1, text2: text2, text3: text3, data: data.data)
+            }
+            if let url = data.data[1].data.url {
+                self.pictureView.loadImageFromURL(url: url)
             }
         }
     }
+    
+
     
     private func addNameInArray(data: [DataModel]) {
         var i = 0
         while i < data.count {
             nameArray.append(data[i].name)
             i += 1
+        }
+    }
+    
+    //MARK: - creating selector
+    private func createSelector(text1: String, text2: String, text3: String, data: [DataModel]) {
+        let items = [text1, text2, text3]
+        let selector = UISegmentedControl(items: items)
+        self.addSelector(selector: selector)
+        if let selectedID = data[2].data.selectedId, let variants = data[2].data.variants{
+            self.getSelectedSegment(id: selectedID, variants: variants, selector: selector)
         }
     }
     
@@ -109,6 +114,7 @@ class StartViewController: UIViewController {
         ])
     }
     
+    //MARK: - adding constraints
     private func addConstraints() {
         view.addSubview(hzLabel1)
         view.addSubview(pictureView)
@@ -128,25 +134,23 @@ class StartViewController: UIViewController {
     }
     
     @objc func hxTestWasTapped() {
-        print("4e za nahoi")
         state = .hz
     }
     
     @objc func hzWasTapped() {
-        print(nameArray)
         state = .hz
     }
 
     @objc func imageWasTapped() {
-        print(nameArray)
         state = .image
     }
     
+    //MARK: - creation and presentation alert
     @objc func getAlert(text: String) {
-        print("??????")
         let alertController = UIAlertController(title: "Name this view: \(text)", message: "", preferredStyle: .actionSheet)
         let alertAction = UIAlertAction(title: "Ok", style: .cancel, handler: nil)
         alertController.addAction(alertAction)
+        addActionSheetForiPad(actionSheet: alertController)
         present(alertController, animated: true, completion: nil)
     }
     
